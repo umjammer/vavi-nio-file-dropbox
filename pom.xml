@@ -3,7 +3,7 @@
 
   <groupId>com.github.fge</groupId>
   <artifactId>java7-fs-dropbox</artifactId>
-  <version>0.0.17v</version>
+  <version>0.0.18v-SNAPSHOT</version>
 
   <name>java7-fs-dropbox</name>
   <description>A Java 7 FileSystem implementation over DropBox</description>
@@ -17,7 +17,7 @@
 
   <properties>
     <vavi-nio-file.groupId>com.github.umjammer</vavi-nio-file.groupId>
-    <vavi-nio-file.version>0.0.12</vavi-nio-file.version>
+    <vavi-nio-file.version>0.0.13</vavi-nio-file.version>
   </properties>
 
   <profiles>
@@ -119,24 +119,41 @@
     </repository>
   </repositories>
 
-  <dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.8.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
+  <dependencies>
     <dependency>
       <groupId>com.dropbox.core</groupId>
       <artifactId>dropbox-core-sdk</artifactId>
-      <version>3.1.3</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>java7-fs-base</artifactId>
-      <version>0.0.10v</version>
+      <version>0.0.12v</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.umjammer.vavi-net-auth</groupId>
       <artifactId>vavi-net-auth-dropbox</artifactId>
-      <version>0.1.2</version>
+      <version>0.1.4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.umjammer.vavi-apps-fuse</groupId>
+      <artifactId>vavi-nio-file-commons</artifactId>
+      <version>0.1.7</version>
     </dependency>
 
     <dependency>
@@ -146,21 +163,24 @@
     </dependency>
 
     <dependency>
+      <groupId>org.eclipse.jetty.websocket</groupId>
+      <artifactId>javax-websocket-client-impl</artifactId>
+      <version>9.4.30.v20200611</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-commons</artifactId>
-      <version>1.5.2</version>
       <scope>test</scope>
     </dependency>
 
