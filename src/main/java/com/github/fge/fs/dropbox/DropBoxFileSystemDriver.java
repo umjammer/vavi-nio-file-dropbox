@@ -26,7 +26,7 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.GetMetadataErrorException;
 import com.dropbox.core.v2.files.Metadata;
-import com.github.fge.filesystem.driver.CachedFileSystemDriver;
+import com.github.fge.filesystem.driver.DoubleCachedFileSystemDriver;
 import com.github.fge.filesystem.provider.FileSystemFactoryProvider;
 
 import vavi.nio.file.Util;
@@ -38,8 +38,7 @@ import static vavi.nio.file.Util.toPathString;
 
 
 @ParametersAreNonnullByDefault
-public final class DropBoxFileSystemDriver
-    extends CachedFileSystemDriver<Metadata> {
+public final class DropBoxFileSystemDriver extends DoubleCachedFileSystemDriver<Metadata> {
 
     private DbxClientV2 client;
 
@@ -112,7 +111,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
 
     @Override
     protected Metadata getRootEntry(Path root) throws IOException {
-        return new FolderMetadata("/", "0", "/", "/", null, null, null, null);
+        return new FolderMetadata("/", "0", "/", "/", null, null, null, null, null);
     }
 
     @Override
@@ -127,7 +126,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
     }
 
     @Override
-    protected InputStream downloadEntry(Metadata entry, Path path, Set<? extends OpenOption> options) throws IOException {
+    protected InputStream downloadEntryImpl(Metadata entry, Path path, Set<? extends OpenOption> options) throws IOException {
         try {
             final DbxDownloader<?> downloader = client.files().download(toDbxPathString(path), null);
             return new BufferedInputStream(new Util.InputStreamForDownloading(downloader.getInputStream()) {
