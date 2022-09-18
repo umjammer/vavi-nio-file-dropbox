@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.dropbox.core.DbxDownloader;
@@ -28,7 +27,6 @@ import com.dropbox.core.v2.files.GetMetadataErrorException;
 import com.dropbox.core.v2.files.Metadata;
 import com.github.fge.filesystem.driver.DoubleCachedFileSystemDriver;
 import com.github.fge.filesystem.provider.FileSystemFactoryProvider;
-
 import vavi.nio.file.Util;
 import vavi.util.Debug;
 
@@ -106,7 +104,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
     @Override
     protected boolean isFolder(Metadata entry) {
         // ugly
-        return FolderMetadata.class.isInstance(entry);
+        return entry instanceof FolderMetadata;
     }
 
     @Override
@@ -148,7 +146,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
                 @Override
                 protected void onClosed() throws IOException {
                     try {
-                        FileMetadata newEntry = FileMetadata.class.cast(uploader.finish());
+                        FileMetadata newEntry = (FileMetadata) uploader.finish();
                         updateEntry(path, newEntry);
                     } catch (DbxException e) {
                         throw new IOException(e);
