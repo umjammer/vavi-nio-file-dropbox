@@ -109,7 +109,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
 
     @Override
     protected Metadata getRootEntry(Path root) throws IOException {
-        return new FolderMetadata("/", "0", "/", "/", null, null, null, null, null);
+        return new FolderMetadata("/", "0", "/", "/", null, null, null, null);
     }
 
     @Override
@@ -129,7 +129,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
             final DbxDownloader<?> downloader = client.files().download(toDbxPathString(path), null);
             return new BufferedInputStream(new Util.InputStreamForDownloading(downloader.getInputStream()) {
                 @Override
-                protected void onClosed() throws IOException {
+                protected void onClosed() {
                     downloader.close();
                 }
             });
