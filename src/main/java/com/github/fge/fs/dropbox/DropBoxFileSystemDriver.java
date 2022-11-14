@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.dropbox.core.DbxDownloader;
@@ -26,9 +25,8 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.GetMetadataErrorException;
 import com.dropbox.core.v2.files.Metadata;
-import com.github.fge.filesystem.driver.CachedFileSystemDriver;
+import com.github.fge.filesystem.driver.DoubleCachedFileSystemDriver;
 import com.github.fge.filesystem.provider.FileSystemFactoryProvider;
-
 import vavi.nio.file.Util;
 import vavi.util.Debug;
 
@@ -38,8 +36,7 @@ import static vavi.nio.file.Util.toPathString;
 
 
 @ParametersAreNonnullByDefault
-public final class DropBoxFileSystemDriver
-    extends CachedFileSystemDriver<Metadata> {
+public final class DropBoxFileSystemDriver extends DoubleCachedFileSystemDriver<Metadata> {
 
     private DbxClientV2 client;
 
@@ -107,7 +104,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
     @Override
     protected boolean isFolder(Metadata entry) {
         // ugly
-        return FolderMetadata.class.isInstance(entry);
+        return entry instanceof FolderMetadata;
     }
 
     @Override
@@ -127,12 +124,12 @@ Debug.println("NOTIFICATION: parent not found: " + e);
     }
 
     @Override
-    protected InputStream downloadEntry(Metadata entry, Path path, Set<? extends OpenOption> options) throws IOException {
+    protected InputStream downloadEntryImpl(Metadata entry, Path path, Set<? extends OpenOption> options) throws IOException {
         try {
             final DbxDownloader<?> downloader = client.files().download(toDbxPathString(path), null);
             return new BufferedInputStream(new Util.InputStreamForDownloading(downloader.getInputStream()) {
                 @Override
-                protected void onClosed() throws IOException {
+                protected void onClosed() {
                     downloader.close();
                 }
             });
@@ -149,7 +146,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
                 @Override
                 protected void onClosed() throws IOException {
                     try {
-                        FileMetadata newEntry = FileMetadata.class.cast(uploader.finish());
+                        FileMetadata newEntry = (FileMetadata) uploader.finish();
                         updateEntry(path, newEntry);
                     } catch (DbxException e) {
                         throw new IOException(e);

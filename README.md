@@ -1,4 +1,8 @@
-[![Release](https://jitpack.io/v/umjammer/java7-fs-dropbox.svg)](https://jitpack.io/#umjammer/java7-fs-dropbox) [![Actions Status](https://github.com/umjammer/java7-fs-dropbox/workflows/Java%20CI/badge.svg)](https://github.com/umjammer/java7-fs-dropbox/actions) [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
+[![Release](https://jitpack.io/v/umjammer/java7-fs-dropbox.svg)](https://jitpack.io/#umjammer/java7-fs-dropbox)
+[![Actions Status](https://github.com/umjammer/java7-fs-dropbox/workflows/Java%20CI/badge.svg)](https://github.com/umjammer/java7-fs-dropbox/actions)
+[![CodeQL](https://github.com/umjammer/java7-fs-dropbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/java7-fs-dropbox/actions/workflows/codeql-analysis.yml)
+![Java](https://img.shields.io/badge/Java-8-b07219)
+[![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
 ## java7-fs-dropbox
 

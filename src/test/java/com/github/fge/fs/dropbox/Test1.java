@@ -28,6 +28,7 @@ class Test1 {
         String email = System.getenv("TEST_ACCOUNT");
 
         Map<String, Object> env = new HashMap<>();
+        env.put(DropBoxFileSystemProvider.ENV_DISABLED_FILE_CACHE, true);
         env.put(DropBoxFileSystemProvider.ENV_APP_CREDENTIAL, new DropBoxTestAppCredential());
         env.put(DropBoxFileSystemProvider.ENV_USER_CREDENTIAL, new DropBoxTestUserCredential(email));
 
