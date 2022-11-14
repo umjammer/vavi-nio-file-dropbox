@@ -3,7 +3,7 @@
 
   <groupId>com.github.fge</groupId>
   <artifactId>java7-fs-dropbox</artifactId>
-  <version>0.0.18v-SNAPSHOT</version>
+  <version>0.0.19v</version>
 
   <name>java7-fs-dropbox</name>
   <description>A Java 7 FileSystem implementation over DropBox</description>
@@ -125,7 +125,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.9.0</version>
+        <version>5.9.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -148,15 +148,15 @@
     <dependency>
       <groupId>com.github.umjammer.vavi-net-auth</groupId>
       <artifactId>vavi-net-auth-dropbox</artifactId>
-      <version>0.1.4</version>
+      <version>0.1.5</version>
     </dependency>
 
     <dependency>
       <!-- for cloud watch -->
       <!-- com.github.umjammer.vavi-apps-fuse -->
-      <groupId>vavi</groupId>
+      <groupId>com.github.umjammer.vavi-apps-fuse</groupId>
       <artifactId>vavi-nio-file-commons</artifactId>
-      <version>0.1.8-SNAPSHOT</version>
+      <version>0.1.8</version>
     </dependency>
 
     <dependency>
