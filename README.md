@@ -1,27 +1,22 @@
-[![Release](https://jitpack.io/v/umjammer/java7-fs-dropbox.svg)](https://jitpack.io/#umjammer/java7-fs-dropbox)
-[![Actions Status](https://github.com/umjammer/java7-fs-dropbox/workflows/Java%20CI/badge.svg)](https://github.com/umjammer/java7-fs-dropbox/actions)
-[![CodeQL](https://github.com/umjammer/java7-fs-dropbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/java7-fs-dropbox/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-8-b07219)
+[![Release](https://jitpack.io/v/umjammer/vavi-nio-file-dropbox.svg)](https://jitpack.io/#umjammer/vavi-nio-file-dropbox)
+[![Actions Status](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-nio-file-dropbox/actions)
+[![CodeQL](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/codeql-analysis.yml)
+![Java](https://img.shields.io/badge/Java-17-b07219)
 [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
-## java7-fs-dropbox
+## vavi-nio-file-dropbox
 
-This project is licensed under both LGPLv3 and ASL 2.0. See file LICENSE for
-more details.
+Java filesystem SPI ([JSR-203](https://jcp.org/en/jsr/detail?id=203)) over [DropBox](https://dropbox.com) API.
 
-## What this is
-
-This is an implementation of a Java 7
-[`FileSystem`](https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html) over
-[DropBox](https://dropbox.com).
+[original](https://github.com/fge/java7-fs-dropbox)
 
 ## Install
 
 ### jars
 
- * https://jitpack.io/#umjammer/java7-fs-dropbox
+ * https://jitpack.io/#umjammer/vavi-nio-file-dropbox
 
-### selenium chrome driver
+### ~~selenium chrome driver~~ (obsoleted, use default browser)
 
  * Download the [chromedriver executable](https://chromedriver.chromium.org/downloads) and locate it into some directory.
    * Don't forget to run jvm with jvm argument `-Dwebdriver.chrome.driver=/usr/local/bin/chromedriver`.
@@ -71,3 +66,7 @@ public class Main {
 ### See also
 
 https://github.com/umjammer/vavi-apps-fuse/blob/master/vavi-nio-file-gathered/src/test/java/vavi/nio/file/dropbox/Main.java
+
+## TODO
+
+ * ~~project name to vavi-nio-file-dropbox~~
