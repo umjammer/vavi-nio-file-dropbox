@@ -109,7 +109,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
 
     @Override
     protected Metadata getRootEntry(Path root) throws IOException {
-        return new FolderMetadata("/", "0", "/", "/", null, null, null, null);
+        return new FolderMetadata("/", "0", "/", "/", null, null, null, null, null);
     }
 
     @Override

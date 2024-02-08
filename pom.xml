@@ -136,7 +136,7 @@
     <dependency>
       <groupId>com.dropbox.core</groupId>
       <artifactId>dropbox-core-sdk</artifactId>
-      <version>5.0.0</version> <!-- 5.4.4 not supported java8-->
+      <version>5.4.4</version>
     </dependency>
 
     <dependency>
