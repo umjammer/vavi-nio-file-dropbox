@@ -3,7 +3,7 @@
 
   <groupId>com.github.fge</groupId>
   <artifactId>vavi-nio-file-dropbox</artifactId>
-  <version>0.0.20v</version>
+  <version>0.0.21</version>
 
   <name>vavi-nio-file-dropbox</name>
   <description>A Java 7 FileSystem implementation over DropBox</description>
