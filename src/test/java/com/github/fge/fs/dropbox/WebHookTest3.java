@@ -17,7 +17,6 @@ import java.util.Locale;
 
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
-
 import vavi.net.auth.oauth2.dropbox.DropBoxLocalAppCredential;
 import vavi.net.auth.oauth2.dropbox.DropBoxOAuth2;
 import vavi.net.auth.web.dropbox.DropBoxLocalUserCredential;
@@ -34,15 +33,15 @@ import vavi.util.Debug;
  */
 public class WebHookTest3 {
 
-    static String email = System.getenv("TEST_ACCOUNT");
-    static String applicationName = System.getenv("APPLICATION_NAME");
+    static final String email = System.getenv("TEST_ACCOUNT");
+    static final String applicationName = System.getenv("APPLICATION_NAME");
 
     /**
      * @param args 0: email
      *
-     * https://developers.google.com/drive/api/v3/reference/changes/watch
-     * https://stackoverflow.com/a/43793313/6102938
-     *  TODO needs domain authorize
+     * TODO needs domain authorize
+     * @see "https://developers.google.com/drive/api/v3/reference/changes/watch"
+     * @see "https://stackoverflow.com/a/43793313/6102938"
      */
     public static void main(String[] args) throws Exception {
         WebHookTest3 app = new WebHookTest3();
@@ -58,11 +57,11 @@ public class WebHookTest3 {
         DbxRequestConfig config = DbxRequestConfig.newBuilder(applicationName).withUserLocaleFrom(Locale.getDefault()).build();
         DbxClientV2 client = new DbxClientV2(config, accessToken);
 
-        DropBoxWatchService service = new DropBoxWatchService(client);
+        try (DropBoxWatchService service = new DropBoxWatchService(client)) {
 Debug.println("WEBSOCKET: start: " + service);
-        try {
+
             URI uri = URI.create("dropbox:///?id=" + email);
-            FileSystem fs = FileSystems.newFileSystem(uri, Collections.EMPTY_MAP);
+            FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
 
             Path tmpDir = fs.getPath("tmp");
             if (!Files.exists(tmpDir)) {
@@ -83,10 +82,9 @@ System.out.println("rm " + remote);
 
             Thread.sleep(10000);
 
+            fs.close();
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            service.close();
+            Debug.printStackTrace(e);
         }
 Debug.println("APP: done");
         DropBoxWatchService.dispose();

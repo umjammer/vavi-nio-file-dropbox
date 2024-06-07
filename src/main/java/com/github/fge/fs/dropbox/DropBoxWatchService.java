@@ -7,6 +7,8 @@
 package com.github.fge.fs.dropbox;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
@@ -16,9 +18,7 @@ import com.dropbox.core.v2.files.ListFolderGetLatestCursorResult;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 import com.github.fge.fs.dropbox.webhook.websocket.DropBoxNotification;
-
 import vavi.nio.file.watch.webhook.WebHookBaseWatchService;
-import vavi.util.Debug;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
@@ -41,10 +41,12 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
  */
 public class DropBoxWatchService extends WebHookBaseWatchService<DropBoxNotification> {
 
+    private static final Logger logger = System.getLogger(DropBoxWatchService.class.getName());
+
     private static final String WEBHOOK_NOTIFICATION_PROVIDER =
             System.getProperty("vavi.nio.file.watch.webhook.NotificationProvider.dropbox", ".dropbox.webhook.websocket");
 
-    private DbxClientV2 client;
+    private final DbxClientV2 client;
 
     private String cursor;
 
@@ -63,7 +65,7 @@ public class DropBoxWatchService extends WebHookBaseWatchService<DropBoxNotifica
                     .start();
 
             cursor = result.getCursor();
-Debug.println("BOX: cursor: " + cursor);
+logger.log(Level.TRACE, "BOX: cursor: " + cursor);
         } catch (DbxException e) {
             throw new IOException(e);
         }
@@ -71,18 +73,18 @@ Debug.println("BOX: cursor: " + cursor);
 
     @Override
     protected void onNotifyMessage(DropBoxNotification notification) throws IOException {
-Debug.println(">> notification: " + notification);
+logger.log(Level.TRACE, ">> notification: " + notification);
         try {
             // TODO limit by account
             boolean hasMore = true;
             while (hasMore) {
-                final ListFolderResult result = client.files().listFolderContinue(cursor);
-                for (final Metadata metadata : result.getEntries()) {
-Debug.println(">> " + metadata.getClass().getName() + ": " + metadata);
+                ListFolderResult result = client.files().listFolderContinue(cursor);
+                for (Metadata metadata : result.getEntries()) {
+logger.log(Level.TRACE, ">> " + metadata.getClass().getName() + ": " + metadata);
                     if (metadata instanceof FileMetadata) {
-                        listener.accept(((FileMetadata) metadata).getPathDisplay(), ENTRY_MODIFY);
+                        listener.accept(metadata.getPathDisplay(), ENTRY_MODIFY);
                     } else if (metadata instanceof DeletedMetadata) {
-                        listener.accept(((DeletedMetadata) metadata).getPathDisplay() ,ENTRY_DELETE);
+                        listener.accept(metadata.getPathDisplay() ,ENTRY_DELETE);
                     }
                 }
 
@@ -92,7 +94,7 @@ Debug.println(">> " + metadata.getClass().getName() + ": " + metadata);
         } catch (DbxException e) {
             throw new IOException(e);
         }
-Debug.println(">> notification: done");
+logger.log(Level.TRACE, ">> notification: done");
     }
 
     @Override

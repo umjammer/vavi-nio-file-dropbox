@@ -18,7 +18,7 @@ import static vavi.nio.file.Base.testMoveFolder;
  * @version 0.00 2016/03/21 umjammer initial version <br>
  */
 @PropsEntity(url = "file://${HOME}/.vavifuse/dropbox/{0}")
-public final class Main3 {
+class MoveToTest {
 
     @Test
     void test01() throws Exception {

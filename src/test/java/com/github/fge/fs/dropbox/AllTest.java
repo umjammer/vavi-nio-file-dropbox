@@ -15,12 +15,12 @@ import static vavi.nio.file.Base.testAll;
 
 
 /**
- * Main. (java fs, dropbox)
+ * All Test. (java fs, dropbox)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/11 umjammer initial version <br>
  */
-public class Main {
+public class AllTest {
 
     @Test
     void test01() throws Exception {

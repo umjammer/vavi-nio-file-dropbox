@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.dropbox.core.DbxApiException;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.DeletedMetadata;
@@ -44,11 +43,11 @@ import com.dropbox.core.v2.files.Metadata;
  */
 public class DropBoxWatchService implements WatchService {
 
-    private DbxClientV2 dropboxClient;
+    private final DbxClientV2 dropboxClient;
     private AtomicBoolean hasChanges;
     private boolean continuePolling;
 
-    public DropBoxWatchService(final DbxClientV2 client) {
+    public DropBoxWatchService(DbxClientV2 client) {
         dropboxClient = client;
     }
 
@@ -59,9 +58,9 @@ public class DropBoxWatchService implements WatchService {
      * @param path path to directory in Dropbox
      * @return cursor for listing changes to the given Dropbox directory
      */
-    private String getLatestCursor(final String path) throws DbxApiException, DbxException {
+    private String getLatestCursor(String path) throws DbxException {
 
-        final ListFolderGetLatestCursorResult result = dropboxClient.files()
+        ListFolderGetLatestCursorResult result = dropboxClient.files()
                 .listFolderGetLatestCursorBuilder(path)
                 .withIncludeDeleted(true)
                 .withIncludeMediaInfo(false)
@@ -86,11 +85,11 @@ public class DropBoxWatchService implements WatchService {
      * @param cursor Latest cursor received since last set of changes
      * @return latest cursor after changes
      */
-    private String examineChanges(String cursor) throws DbxApiException, DbxException {
+    private String examineChanges(String cursor) throws DbxException {
 
         while (true) {
-            final ListFolderResult result = dropboxClient.files().listFolderContinue(cursor);
-            for (final Metadata metadata : result.getEntries()) {
+            ListFolderResult result = dropboxClient.files().listFolderContinue(cursor);
+            for (Metadata metadata : result.getEntries()) {
                 if (metadata instanceof FileMetadata || metadata instanceof DeletedMetadata) {
                     hasChanges.getAndSet(true);
                 }
@@ -113,7 +112,7 @@ public class DropBoxWatchService implements WatchService {
     }
 
     @Override
-    public WatchKey poll(final long timeout, final TimeUnit unit) throws InterruptedException {
+    public WatchKey poll(long timeout, TimeUnit unit) throws InterruptedException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -127,16 +126,16 @@ public class DropBoxWatchService implements WatchService {
         hasChanges = new AtomicBoolean(false);
         continuePolling = true;
 
-        while (hasChanges.get() == false && continuePolling) {
+        while (!hasChanges.get() && continuePolling) {
             try {
 
-                final String cursor = getLatestCursor("");
+                String cursor = getLatestCursor("");
 
                 // final ListFolderLongpollResult listFolderLongpollResult =
                 // DropboxClient.getDefault().files().listFolderLongpoll(cursor);
                 // if (listFolderLongpollResult.getChanges()) {
 
-                final ListFolderLongpollResult listFolderLongpollResult = DbxClientV2Ex.listFolderLongpoll(cursor);
+                ListFolderLongpollResult listFolderLongpollResult = DbxClientV2Ex.listFolderLongpoll(cursor);
                 if (listFolderLongpollResult == null) {
                     continue;
                 }
@@ -147,23 +146,23 @@ public class DropBoxWatchService implements WatchService {
                 // we were asked to back off from our polling, wait the
                 // requested amount of seconds
                 // before issuing another longpoll request.
-                final Long backoff = listFolderLongpollResult.getBackoff();
+                Long backoff = listFolderLongpollResult.getBackoff();
                 if (backoff != null) {
                     try {
                         // backing off for %d secs...\n", backoff.longValue());s
                         Thread.sleep(TimeUnit.SECONDS.toMillis(backoff));
-                    } catch (final InterruptedException ex) {
+                    } catch (InterruptedException ex) {
                         throw new IOException("Error when backing off from watching the Dropbox folder", ex);
                     }
                 }
 
-            } catch (final DbxException | IOException ex) {
+            } catch (DbxException | IOException ignored) {
             }
         }
 
         // We return an empty Watchkey. The goal here is that we only
         // want to notify that some changes happened
-        final WatchKey dropboxWatchKey = new WatchKey() {
+        WatchKey dropboxWatchKey = new WatchKey() {
 
             @Override
             public void cancel() {

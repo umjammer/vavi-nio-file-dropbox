@@ -80,5 +80,3 @@ public class DropBoxTestAppCredential extends BaseLocalAppCredential implements 
         return null;
     }
 }
-
-/* */

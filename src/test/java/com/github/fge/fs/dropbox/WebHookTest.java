@@ -13,7 +13,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +51,7 @@ public class WebHookTest {
 
     @ClientEndpoint(configurator = AuthorizationConfigurator.class)
     public static class NotificationClient {
-        Service service;
+        final Service service;
         NotificationClient(Service service) {
             this.service = service;
         }
@@ -69,7 +68,7 @@ Debug.println(notification);
 
         @OnError
         public void onError(Throwable t) {
-t.printStackTrace();
+Debug.printStackTrace(t);
         }
 
         @OnClose
@@ -79,19 +78,19 @@ Debug.println("CLOSE");
         }
     }
 
-    static String username = System.getenv("VAVI_APPS_WEBHOOK_USERNAME");
-    static String password = System.getenv("VAVI_APPS_WEBHOOK_PASSWORD");
+    static final String username = System.getenv("VAVI_APPS_WEBHOOK_USERNAME");
+    static final String password = System.getenv("VAVI_APPS_WEBHOOK_PASSWORD");
 
     public static class AuthorizationConfigurator extends ClientEndpointConfig.Configurator {
         @Override
         public void beforeRequest(Map<String, List<String>> headers) {
-            headers.put("Authorization", Arrays.asList("Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes())));
+            headers.put("Authorization", List.of("Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes())));
         }
-    };
+    }
 
-    static String websocketBaseUrl = System.getenv("VAVI_APPS_WEBHOOK_WEBSOCKET_BASE_URL");
-    static String websocketPath = System.getenv("VAVI_APPS_WEBHOOK_WEBSOCKET_DROPBOX_PATH");
-    static String applicationName = System.getenv("APPLICATION_NAME");
+    static final String websocketBaseUrl = System.getenv("VAVI_APPS_WEBHOOK_WEBSOCKET_BASE_URL");
+    static final String websocketPath = System.getenv("VAVI_APPS_WEBHOOK_WEBSOCKET_DROPBOX_PATH");
+    static final String applicationName = System.getenv("APPLICATION_NAME");
 
     static class Service {
         DbxClientV2 client;
@@ -132,7 +131,7 @@ Debug.println("notification: " + notification);
         }
     }
 
-    static String email = System.getenv("TEST_ACCOUNT");
+    static final String email = System.getenv("TEST_ACCOUNT");
 
     /**
      * @param args 0: email
@@ -149,7 +148,7 @@ Debug.println("Start");
             service.start();
 
             URI uri = URI.create("dropbox:///?id=" + email);
-            FileSystem fs = FileSystems.newFileSystem(uri, Collections.EMPTY_MAP);
+            FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
 
 System.out.println("ls -l");
 Files.list(fs.getPath("/")).forEach(System.out::println);
@@ -172,6 +171,8 @@ System.out.println("cp " + source + " " + remote);
 
 System.out.println("rm " + remote);
             Files.delete(remote);
+
+            fs.close();
         } finally {
             service.stop();
         }
