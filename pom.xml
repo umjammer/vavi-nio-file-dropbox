@@ -17,30 +17,26 @@
 
   <properties>
     <vavi-nio-file-base.groupId>com.github.umjammer</vavi-nio-file-base.groupId> <!-- com.github.fge / com.github.umjammer -->
-    <vavi-nio-file-base.version>0.0.14v</vavi-nio-file-base.version>
+    <vavi-nio-file-base.version>0.0.17</vavi-nio-file-base.version>
 
     <vavi-nio-file-fuse.groupId>com.github.umjammer</vavi-nio-file-fuse.groupId> <!-- vavi / com.github.umjammer -->
-    <vavi-nio-file-fuse.version>0.0.16</vavi-nio-file-fuse.version>
+    <vavi-nio-file-fuse.version>0.0.17</vavi-nio-file-fuse.version>
   </properties>
 
   <profiles>
     <profile>
-      <id>local (not on CI)</id>
+      <id>local</id>
       <activation>
         <file>
           <exists>${basedir}/local.properties</exists>
         </file>
-        <property>
-          <name>env.JITPACK</name>
-          <value>!true</value>
-        </property>
       </activation>
       <build>
         <plugins>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>properties-maven-plugin</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.1</version>
             <executions>
               <execution>
                 <phase>initialize</phase>
@@ -58,7 +54,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.2.2</version>
+            <version>3.2.5</version>
             <configuration>
               <environmentVariables>
                 <TEST_ACCOUNT>${test.account}</TEST_ACCOUNT>
@@ -66,11 +62,13 @@
                 <TEST_CLIENT_ID>${test.client_id}</TEST_CLIENT_ID>
                 <TEST_CLIENT_SECRET>${test.client_secret}</TEST_CLIENT_SECRET>
                 <TEST_REDIRECT_URL>${test.redirect_url}</TEST_REDIRECT_URL>
+                <TEST_SCOPES>${test.scopes}</TEST_SCOPES>
+                <TEST_MOUNT_POINT>${test.mount_point}</TEST_MOUNT_POINT>
               </environmentVariables>
               <argLine>
                 -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
-                -Dwebdriver.chrome.driver=${webdriver.chrome.driver}
-                -Dcom.google.chrome.app="${com.google.chrome.app}"
+                -Dwebdriver.chrome.driver=@{webdriver.chrome.driver}
+                -Dcom.google.chrome.app="@{com.google.chrome.app}"
               </argLine>
               <trimStackTrace>false</trimStackTrace>
             </configuration>
@@ -90,7 +88,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.2.2</version>
+            <version>3.2.5</version>
             <configuration>
               <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <trimStackTrace>false</trimStackTrace>
@@ -106,7 +104,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
+        <version>3.12.1</version>
         <configuration>
           <release>17</release>
         </configuration>
@@ -126,7 +124,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.10.1</version>
+        <version>5.13.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -137,7 +135,7 @@
     <dependency>
       <groupId>com.dropbox.core</groupId>
       <artifactId>dropbox-core-sdk</artifactId>
-      <version>5.4.4</version>
+      <version>7.0.0</version>
     </dependency>
 
     <dependency>
@@ -149,7 +147,7 @@
     <dependency>
       <groupId>com.github.umjammer.vavi-net-auth</groupId> <!-- vavi / com.github.umjammer.vavi-net-auth -->
       <artifactId>vavi-net-auth-dropbox</artifactId>
-      <version>0.1.9</version>
+      <version>0.1.15</version>
     </dependency>
 
     <dependency>
