@@ -22,9 +22,8 @@ import vavi.nio.file.watch.webhook.NotificationProvider;
 public class DropBoxWebSocketNotificationProvider implements NotificationProvider {
 
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> Notification<T> getNotification(Consumer<T> callback, Object... args) throws IOException {
-        return Notification.class.cast(new DropBoxWebSocketNotification(Consumer.class.cast(callback), args));
+        return (Notification) new DropBoxWebSocketNotification((Consumer) callback, args);
     }
 }
-
-/* */

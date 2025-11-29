@@ -25,8 +25,8 @@ public final class DropBoxFileStore
      *
      * @param client the (valid) DropBox client to use
      */
-    public DropBoxFileStore(final DbxClientV2 client,
-        final FileAttributesFactory factory)
+    public DropBoxFileStore(DbxClientV2 client,
+                            FileAttributesFactory factory)
     {
         super("dropbox", factory, false);
         this.client = client;
@@ -65,7 +65,7 @@ public final class DropBoxFileStore
     public long getUsableSpace()
         throws IOException
     {
-        final SpaceUsage quota = getQuota();
+        SpaceUsage quota = getQuota();
         return quota.getAllocation().getIndividualValue().getAllocated() - quota.getUsed();
     }
 
@@ -86,7 +86,7 @@ public final class DropBoxFileStore
     public long getUnallocatedSpace()
         throws IOException
     {
-        final SpaceUsage quota = getQuota();
+        SpaceUsage quota = getQuota();
         return quota.getAllocation().getIndividualValue().getAllocated() - quota.getUsed();
     }
 

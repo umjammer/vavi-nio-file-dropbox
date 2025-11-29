@@ -24,6 +24,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 
 import org.json.JSONObject;
 
@@ -45,7 +46,7 @@ public class DbxClientV2Ex {
      * @param cursor
      * @return
      */
-    public static ListFolderLongpollResult listFolderLongpoll(final String cursor) throws IOException {
+    public static ListFolderLongpollResult listFolderLongpoll(String cursor) throws IOException {
         URI uri = URI.create("https://notify.dropboxapi.com/2/files/list_folder/longpoll");
 
         HttpURLConnection postRequest = (HttpURLConnection) uri.toURL().openConnection();
@@ -57,13 +58,13 @@ public class DbxClientV2Ex {
 
         postRequest.connect();
 
-        Writer writer = new OutputStreamWriter(postRequest.getOutputStream(), "utf-8");
+        Writer writer = new OutputStreamWriter(postRequest.getOutputStream(), StandardCharsets.UTF_8);
         writer.write(jsonPayload);
         writer.flush();
 
         CharBuffer buffer = CharBuffer.allocate(8192);
-        Reader reader = new InputStreamReader(postRequest.getInputStream(), "utf-8");
-        StringBuffer sb = new StringBuffer();
+        Reader reader = new InputStreamReader(postRequest.getInputStream(), StandardCharsets.UTF_8);
+        StringBuilder sb = new StringBuilder();
         while (true) {
             int r = reader.read(buffer);
             if (r == -1) {
@@ -73,7 +74,7 @@ public class DbxClientV2Ex {
         }
 
         String entity = sb.toString();
-        if (entity == null || entity.length() == 0) {
+        if (entity.isEmpty()) {
             return null;
         }
 
@@ -83,10 +84,10 @@ public class DbxClientV2Ex {
         final String backoffElementName = "backoff";
         boolean hasChanges = jsonContent.has(changesElementName);
         boolean hasbackoff = jsonContent.has(backoffElementName);
-        if (hasChanges == false && hasbackoff == false) {
+        if (!hasChanges && !hasbackoff) {
             return null;
         }
-        boolean changes = hasChanges ? Boolean.valueOf(jsonContent.get(changesElementName).toString()) : false;
+        boolean changes = hasChanges && Boolean.parseBoolean(jsonContent.get(changesElementName).toString());
         Long backoff = hasbackoff ? Long.valueOf(jsonContent.get(backoffElementName).toString()) : null;
         ListFolderLongpollResult listFolderLongpollResult = new ListFolderLongpollResult(changes, backoff);
 

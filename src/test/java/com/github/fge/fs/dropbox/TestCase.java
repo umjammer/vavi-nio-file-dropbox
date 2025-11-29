@@ -16,12 +16,12 @@ import static vavi.nio.file.Base.testAll;
 
 
 /**
- * Test1.
+ * TestCase.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2020/05/01 umjammer initial version <br>
  */
-class Test1 {
+class TestCase {
 
     @Test
     void test01() throws Exception {
@@ -37,5 +37,3 @@ class Test1 {
         testAll(new DropBoxFileSystemProvider().newFileSystem(uri, env));
     }
 }
-
-/* */

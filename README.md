@@ -1,10 +1,12 @@
 [![Release](https://jitpack.io/v/umjammer/vavi-nio-file-dropbox.svg)](https://jitpack.io/#umjammer/vavi-nio-file-dropbox)
-[![Actions Status](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-nio-file-dropbox/actions)
+[![Java CI](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/codeql-analysis.yml)
 ![Java](https://img.shields.io/badge/Java-17-b07219)
 [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
-## vavi-nio-file-dropbox
+# vavi-nio-file-dropbox
+
+<img alt="logo" src="src/test/resources/dropbox.svg" width="200" /> &nbsp;&nbsp;<sub><a href="https://www.box.com/">©️ Dropbox Inc.</a></sub>
 
 Java filesystem SPI ([JSR-203](https://jcp.org/en/jsr/detail?id=203)) over [DropBox](https://dropbox.com) API.
 
@@ -58,7 +60,7 @@ public class Main {
         URI uri = URI.create("dropbox:///?id=" + email);
 
         FileSystem fs = FileSystems.newFileSystem(uri, env);
-            :
+            ⋮
     }
 }
 ```
@@ -70,4 +72,4 @@ https://github.com/umjammer/vavi-apps-fuse/blob/master/vavi-nio-file-gathered/sr
 ## TODO
 
  * ~~project name to vavi-nio-file-dropbox~~
- * rename main branch
+ * ~~rename main branch~~

@@ -30,11 +30,11 @@ public final class DropBoxBasicFileAttributesProvider
 {
     private final FileMetadata fileEntry;
 
-    public DropBoxBasicFileAttributesProvider(@Nonnull final Metadata entry)
+    public DropBoxBasicFileAttributesProvider(@Nonnull Metadata entry)
         throws IOException
     {
-        fileEntry = FileMetadata.class.isInstance(Objects.requireNonNull(entry))
-            ? FileMetadata.class.cast(entry) : null;
+        fileEntry = Objects.requireNonNull(entry) instanceof FileMetadata
+            ? (FileMetadata) entry : null;
     }
 
     /**

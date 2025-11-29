@@ -29,7 +29,7 @@ import vavi.net.fuse.Base;
  * @version 0.00 2017/03/19 umjammer initial version <br>
  */
 @DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
-public class Main4 {
+public class FuseTest {
 
     String mountPoint;
     FileSystem fs;
@@ -37,10 +37,8 @@ public class Main4 {
 
     @BeforeEach
     public void before() throws Exception {
-        System.setProperty("vavi.util.logging.VaviFormatter.extraClassMethod", "co\\.paralleluniverse\\.fuse\\.LoggedFuseFilesystem#log");
-
-        String email = System.getenv("TEST4_ACCOUNT");
-        mountPoint = System.getenv("TEST4_MOUNT_POINT");
+        String email = System.getenv("TEST_ACCOUNT");
+        mountPoint = System.getenv("TEST_MOUNT_POINT");
 
         URI uri = URI.create("dropbox:///?id=" + email);
 
@@ -76,7 +74,7 @@ public class Main4 {
     /**
      * @param args 0: mount point, 1: email
      */
-    public static void main(final String... args) throws IOException {
+    public static void main(String... args) throws IOException {
         String email = args[1];
 
         Map<String, Object> env = new HashMap<>();
@@ -95,5 +93,3 @@ public class Main4 {
         JavaFS.mount(fs, Paths.get(args[0]), false, true, options);
     }
 }
-
-/* */

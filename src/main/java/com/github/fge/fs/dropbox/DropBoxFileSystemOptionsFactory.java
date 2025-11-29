@@ -23,5 +23,3 @@ public class DropBoxFileSystemOptionsFactory extends FileSystemOptionsFactory {
         addLinkOption(LinkOption.NOFOLLOW_LINKS);
     }
 }
-
-/* */

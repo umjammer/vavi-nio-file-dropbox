@@ -33,15 +33,15 @@ public final class DropBoxFileSystemRepository
 
     @Nonnull
     @Override
-    public FileSystemDriver createDriver(final URI uri,
-        final Map<String, ?> env)
+    public FileSystemDriver createDriver(URI uri,
+                                         Map<String, ?> env)
         throws IOException
     {
         // 1. user credential
         UserCredential userCredential = null;
 
         if (env.containsKey(DropBoxFileSystemProvider.ENV_USER_CREDENTIAL)) {
-            userCredential = UserCredential.class.cast(env.get(DropBoxFileSystemProvider.ENV_USER_CREDENTIAL));
+            userCredential = (UserCredential) env.get(DropBoxFileSystemProvider.ENV_USER_CREDENTIAL);
         }
 
         Map<String, String> params = getParamsMap(uri);
@@ -59,7 +59,7 @@ public final class DropBoxFileSystemRepository
         OAuth2AppCredential appCredential = null;
 
         if (env.containsKey(DropBoxFileSystemProvider.ENV_APP_CREDENTIAL)) {
-            appCredential = OAuth2AppCredential.class.cast(env.get(DropBoxFileSystemProvider.ENV_APP_CREDENTIAL));
+            appCredential = (OAuth2AppCredential) env.get(DropBoxFileSystemProvider.ENV_APP_CREDENTIAL);
         }
 
         if (appCredential == null) {
@@ -67,11 +67,11 @@ public final class DropBoxFileSystemRepository
         }
 
         // 3. process
-        final String accessToken = new DropBoxOAuth2(appCredential).authorize(userCredential);
+        String accessToken = new DropBoxOAuth2(appCredential).authorize(userCredential);
 
-        final DbxRequestConfig config = DbxRequestConfig.newBuilder(NAME).withUserLocaleFrom(Locale.getDefault()).build();
-        final DbxClientV2 client = new DbxClientV2(config, accessToken);
-        final DropBoxFileStore fileStore = new DropBoxFileStore(client, factoryProvider.getAttributesFactory());
+        DbxRequestConfig config = DbxRequestConfig.newBuilder(NAME).withUserLocaleFrom(Locale.getDefault()).build();
+        DbxClientV2 client = new DbxClientV2(config, accessToken);
+        DropBoxFileStore fileStore = new DropBoxFileStore(client, factoryProvider.getAttributesFactory());
         return new DropBoxFileSystemDriver(fileStore, factoryProvider, client, env);
     }
 }

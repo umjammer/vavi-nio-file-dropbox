@@ -9,20 +9,22 @@ package com.github.fge.fs.dropbox;
 import java.net.URI;
 import java.util.Collections;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static vavi.nio.file.Base.testAll;
 
 
 /**
- * Main. (java fs, dropbox)
+ * All Test. (java fs, dropbox)
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2019/07/11 umjammer initial version <br>
  */
-public class Main {
+public class AllTest {
 
     @Test
+    @Disabled("duplicated")
     void test01() throws Exception {
         String email = System.getenv("DROPBOX_TEST_ACCOUNT");
 

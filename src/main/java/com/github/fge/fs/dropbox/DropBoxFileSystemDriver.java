@@ -5,6 +5,8 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.file.CopyOption;
 import java.nio.file.FileStore;
 import java.nio.file.OpenOption;
@@ -28,7 +30,6 @@ import com.dropbox.core.v2.files.Metadata;
 import com.github.fge.filesystem.driver.DoubleCachedFileSystemDriver;
 import com.github.fge.filesystem.provider.FileSystemFactoryProvider;
 import vavi.nio.file.Util;
-import vavi.util.Debug;
 
 import static com.github.fge.fs.dropbox.DropBoxFileSystemProvider.ENV_USE_SYSTEM_WATCHER;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -38,7 +39,9 @@ import static vavi.nio.file.Util.toPathString;
 @ParametersAreNonnullByDefault
 public final class DropBoxFileSystemDriver extends DoubleCachedFileSystemDriver<Metadata> {
 
-    private DbxClientV2 client;
+    private static final Logger logger = System.getLogger(DropBoxFileSystemDriver.class.getName());
+
+    private final DbxClientV2 client;
 
     private DropBoxWatchService systemWatcher;
 
@@ -66,32 +69,32 @@ public final class DropBoxFileSystemDriver extends DoubleCachedFileSystemDriver<
                 Path path = cache.getEntry(e -> pathString.equals(e.getPathDisplay()));
                 cache.removeEntry(path);
             } catch (NoSuchElementException e) {
-Debug.println("NOTIFICATION: already deleted: " + pathString);
+logger.log(Level.TRACE, "NOTIFICATION: already deleted: " + pathString);
             }
         } else {
             try {
                 try {
                     Path path = cache.getEntry(e -> pathString.equals(e.getPathDisplay()));
-Debug.println("NOTIFICATION: maybe updated: " + path);
+logger.log(Level.TRACE, "NOTIFICATION: maybe updated: " + path);
                     cache.removeEntry(path);
                     cache.getEntry(path);
                 } catch (NoSuchElementException e) {
 // TODO impl
 //                    Metadata entry = client.files().getMetadata(pathString);
 //                    Path path = parent.resolve(pathString);
-//Debug.println("NOTIFICATION: maybe created: " + path);
+//logger.log(Level.TRACE, "NOTIFICATION: maybe created: " + path);
 //                    cache.addEntry(path, entry);
                 }
             } catch (NoSuchElementException e) {
-Debug.println("NOTIFICATION: parent not found: " + e);
+logger.log(Level.TRACE, "NOTIFICATION: parent not found: " + e);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.ERROR, e.getMessage(), e);
             }
         }
     }
 
     /** */
-    private String toDbxPathString(Path path) throws IOException {
+    private static String toDbxPathString(Path path) throws IOException {
          String pathString = toPathString(path);
          return pathString.equals("/") ? "" : pathString;
     }
@@ -126,7 +129,8 @@ Debug.println("NOTIFICATION: parent not found: " + e);
     @Override
     protected InputStream downloadEntryImpl(Metadata entry, Path path, Set<? extends OpenOption> options) throws IOException {
         try {
-            final DbxDownloader<?> downloader = client.files().download(toDbxPathString(path), null);
+            @SuppressWarnings("resource") // closed at inner class below
+            DbxDownloader<?> downloader = client.files().download(toDbxPathString(path), null);
             return new BufferedInputStream(new Util.InputStreamForDownloading(downloader.getInputStream()) {
                 @Override
                 protected void onClosed() {
@@ -141,7 +145,8 @@ Debug.println("NOTIFICATION: parent not found: " + e);
     @Override
     protected OutputStream uploadEntry(Metadata parentEntry, Path path, Set<? extends OpenOption> options) throws IOException {
         try {
-            final DbxUploader<?, ?, ?> uploader = client.files().upload(toDbxPathString(path));
+            @SuppressWarnings("resource") // closed at inner class below
+            DbxUploader<?, ?, ?> uploader = client.files().upload(toDbxPathString(path));
             return new BufferedOutputStream(new Util.OutputStreamForUploading(uploader.getOutputStream()) {
                 @Override
                 protected void onClosed() throws IOException {
@@ -180,7 +185,7 @@ Debug.println("NOTIFICATION: parent not found: " + e);
 
     @Override
     protected boolean hasChildren(Metadata dirEntry, Path dir) throws IOException {
-        return getDirectoryEntries(dirEntry, dir).size() > 0;
+        return !getDirectoryEntries(dirEntry, dir).isEmpty();
     }
 
     /** */

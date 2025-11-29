@@ -41,14 +41,11 @@ public class DropBoxNotification {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("DropBoxNotification [listFolder=");
-        builder.append(listFolder);
-        builder.append(", delta=");
-        builder.append(delta);
-        builder.append("]");
-        return builder.toString();
+        String builder = "DropBoxNotification [listFolder=" +
+                listFolder +
+                ", delta=" +
+                delta +
+                "]";
+        return builder;
     }
 }
-
-/* */
