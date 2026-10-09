@@ -221,7 +221,7 @@ logger.log(Level.TRACE, "NOTIFICATION: parent not found: " + e);
     @Override
     protected Metadata moveFolderEntry(Metadata sourceEntry, Metadata targetParentEntry, Path source, Path target, boolean targetIsParent) throws IOException {
         try {
-            String targetPathString = toDbxPathString(targetIsParent ? target.resolve(source.getFileName()) : target);
+            String targetPathString = toDbxPathString(target);
             return client.files().moveV2(toDbxPathString(source), targetPathString).getMetadata();
         } catch (DbxException e) {
             throw new IOException("path: " + source + ", " + target, e);

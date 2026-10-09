@@ -1,12 +1,12 @@
 [![Release](https://jitpack.io/v/umjammer/vavi-nio-file-dropbox.svg)](https://jitpack.io/#umjammer/vavi-nio-file-dropbox)
 [![Java CI](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-nio-file-dropbox/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-17-b07219)
+![Java](https://img.shields.io/badge/Java-25-b07219)
 [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
 # vavi-nio-file-dropbox
 
-<img alt="logo" src="src/test/resources/dropbox.svg" width="200" /> &nbsp;&nbsp;<sub><a href="https://www.box.com/">©️ Dropbox Inc.</a></sub>
+<img alt="logo" src="src/test/resources/duke_dropbox.png" width=160 />
 
 Java filesystem SPI ([JSR-203](https://jcp.org/en/jsr/detail?id=203)) over [DropBox](https://dropbox.com) API.
 
@@ -73,3 +73,7 @@ https://github.com/umjammer/vavi-apps-fuse/blob/master/vavi-nio-file-gathered/sr
 
  * ~~project name to vavi-nio-file-dropbox~~
  * ~~rename main branch~~
+
+---
+
+<sub>image designed by @umjammer, drawn by nano banana</sub>
