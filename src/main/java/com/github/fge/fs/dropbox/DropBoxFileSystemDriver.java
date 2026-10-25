@@ -79,15 +79,17 @@ logger.log(Level.TRACE, "NOTIFICATION: maybe updated: " + path);
                     cache.removeEntry(path);
                     cache.getEntry(path);
                 } catch (NoSuchElementException e) {
-// TODO impl
-//                    Metadata entry = client.files().getMetadata(pathString);
-//                    Path path = parent.resolve(pathString);
-//logger.log(Level.TRACE, "NOTIFICATION: maybe created: " + path);
-//                    cache.addEntry(path, entry);
+                    Metadata entry = client.files().getMetadata(pathString);
+                    int p = pathString.lastIndexOf('/');
+                    String parentString = p <= 0 ? "/" : pathString.substring(0, p);
+                    Path parent = cache.getEntry(f -> parentString.equalsIgnoreCase(f.getPathDisplay()));
+                    Path path = parent.resolve(entry.getName());
+logger.log(Level.TRACE, "NOTIFICATION: maybe created: " + path);
+                    cache.addEntry(path, entry);
                 }
             } catch (NoSuchElementException e) {
 logger.log(Level.TRACE, "NOTIFICATION: parent not found: " + e);
-            } catch (IOException e) {
+            } catch (DbxException | IOException e) {
                 logger.log(Level.ERROR, e.getMessage(), e);
             }
         }
@@ -234,6 +236,13 @@ logger.log(Level.TRACE, "NOTIFICATION: parent not found: " + e);
             return client.files().moveV2(toDbxPathString(source), toDbxPathString(target)).getMetadata();
         } catch (DbxException e) {
             throw new IOException("path: " + source + ", " + target, e);
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (systemWatcher != null) {
+            systemWatcher.close();
         }
     }
 

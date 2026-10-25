@@ -21,7 +21,7 @@ import java.util.List;
 public class DropBoxNotification {
 
     public static class ListFolder {
-        List<String> accounts;
+        public List<String> accounts;
         @Override
         public String toString() {
             return "accounts=" + accounts.toString();
@@ -29,7 +29,7 @@ public class DropBoxNotification {
     }
 
     public static class Delta {
-        List<String> users;
+        public List<String> users;
         @Override
         public String toString() {
             return "users=" + users.toString();
